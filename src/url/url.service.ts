@@ -22,4 +22,8 @@ export class UrlService {
   async findExistingURL(url: string): Promise<Url> {
     return this.modelClass.query().where({ longUrl: url }).limit(1).first();
   }
+
+  async findByCode(code: string): Promise<Url> {
+    return this.modelClass.query().where({ urlCode: code }).limit(1).first();
+  }
 }

@@ -33,4 +33,23 @@ export class UrlController {
       return res.status(HttpStatus.BAD_REQUEST).json("Invalid URL!");
     }
   }
+
+  @Get("redirect/:code")
+  async redirectToUrl(
+    @Param("code") code: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    console.log(code);
+    try {
+      const url = await this.urlService.findByCode(code);
+
+      if (url) {
+        return res.redirect(HttpStatus.PERMANENT_REDIRECT, url.longUrl);
+      } else {
+        return res.status(HttpStatus.NOT_FOUND).json("Link does not exist!");
+      }
+    } catch (error) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Server Error!");
+    }
+  }
 }

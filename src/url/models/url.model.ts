@@ -1,7 +1,7 @@
-import { Model } from 'objection';
+import { Model } from "objection";
 
-export class Character extends Model {
-  static tableName = 'url';
+export class Url extends Model {
+  static tableName = "url";
 
   urlCode: string;
   longUrl: string;

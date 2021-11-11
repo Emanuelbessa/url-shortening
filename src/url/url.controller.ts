@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Res, HttpStatus } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  HttpStatus,
+  Get,
+  Param,
+} from "@nestjs/common";
 import { UrlService } from "./url.service";
 import { isUri } from "valid-url";
 import { Response } from "express";
@@ -45,6 +53,24 @@ export class UrlController {
 
       if (url) {
         return res.redirect(HttpStatus.PERMANENT_REDIRECT, url.longUrl);
+      } else {
+        return res.status(HttpStatus.NOT_FOUND).json("Link does not exist!");
+      }
+    } catch (error) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Server Error!");
+    }
+  }
+
+  @Get("decode/:code")
+  async decodeUrl(
+    @Param("code") code: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    try {
+      const url = await this.urlService.findByCode(code);
+
+      if (url) {
+        return res.json(url);
       } else {
         return res.status(HttpStatus.NOT_FOUND).json("Link does not exist!");
       }
